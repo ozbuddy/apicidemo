@@ -1,0 +1,234 @@
+{
+	"info": {
+		"_postman_id": "f5e215c0-75df-4a93-8f61-e36ff364b204",
+		"name": "Library",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33834801",
+		"_collection_link": "https://cloudy-crescent-389546.postman.co/workspace/APIAutomation~905f5ded-ae22-433e-81af-d6e12e1da66d/collection/33834801-f5e215c0-75df-4a93-8f61-e36ff364b204?action=share&source=collection_link&creator=33834801"
+	},
+	"item": [
+		{
+			"name": "AddBook",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();\r",
+							"pm.test(\"validate add book\", function()\r",
+							"{\r",
+							"\r",
+							"pm.response.to.have.status(200);\r",
+							"pm.expect(jsonData).have.property(\"Msg\");\r",
+							"pm.expect(jsonData.Msg).to.eql(\"successfully added\");\r",
+							"\r",
+							"const response= pm.response.json();\r",
+							"pm.collectionVariables.set(\"id\", response.ID);\r",
+							"\r",
+							"}\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							")"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n \r\n \"name\":\"{{$randomFirstName}}\",\r\n \"isbn\":\"{{$randomAlphaNumeric}}\",\r\n \"aisle\":\"{{$randomInt}}\",\r\n \"author\":\"{{$randomLastName}}\"\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://rahulshettyacademy.com/Library/Addbook.php",
+					"protocol": "https",
+					"host": [
+						"rahulshettyacademy",
+						"com"
+					],
+					"path": [
+						"Library",
+						"Addbook.php"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetBook",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//Verify Status Code is Success\r",
+							"pm.test(\"Verify Status Code is Success\",()=>{\r",
+							"pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"//Verify Headers \r",
+							"pm.test(\"Verify Headers \",()=>{\r",
+							"pm.response.to.have.header(\"Content-Type\");\r",
+							"});\r",
+							"\r",
+							"//Verify Header has value\r",
+							"pm.test(\"Verify Header has value\",()=>{\r",
+							"pm.expect(pm.response.headers.get('Content-Type')).to.eql(\"application/json;charset=UTF-8\");\r",
+							"});\r",
+							"\r",
+							"const response = pm.response.json();\r",
+							"\r",
+							"//Verify Data Fields\r",
+							"pm.test(\"Verify data fields\",()=>{\r",
+							"pm.expect(response[0].book_name).to.eql('Learn Appium Automation with Java');\r",
+							"pm.expect(response[0].isbn).to.eql(\"isbn\");\r",
+							"pm.expect(response[0].aisle).to.eql(\"123\");\r",
+							"pm.expect(response[0].author).to.eql(\"John foer\");\r",
+							"});\r",
+							"\r",
+							"\r",
+							"//Verify Schema\r",
+							" var Schema = {\r",
+							"  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\r",
+							"  \"title\": \"Generated schema for Root\",\r",
+							"  \"type\": \"array\",\r",
+							"  \"items\": {\r",
+							"    \"type\": \"object\",\r",
+							"    \"properties\": {\r",
+							"      \"book_name\": {\r",
+							"        \"type\": \"string\"\r",
+							"      },\r",
+							"      \"isbn\": {\r",
+							"        \"type\": \"string\"\r",
+							"      },\r",
+							"      \"aisle\": {\r",
+							"        \"type\": \"string\"\r",
+							"      },\r",
+							"      \"author\": {\r",
+							"        \"type\": \"string\"\r",
+							"      }\r",
+							"    },\r",
+							"    \"required\": [\r",
+							"      \"book_name\",\r",
+							"      \"isbn\",\r",
+							"      \"aisle\",\r",
+							"      \"author\"\r",
+							"    ]\r",
+							"  }\r",
+							"}\r",
+							"\r",
+							"pm.test(\"Validate schema\", () => {\r",
+							"    pm.expect(tv4.validate(response, Schema)).to.be.true;\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://rahulshettyacademy.com/Library/GetBook.php?ID=isbn123",
+					"protocol": "https",
+					"host": [
+						"rahulshettyacademy",
+						"com"
+					],
+					"path": [
+						"Library",
+						"GetBook.php"
+					],
+					"query": [
+						{
+							"key": "ID",
+							"value": "isbn123"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteBook",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData= pm.response.json();\r",
+							"\r",
+							"pm.test(\"Validate delete Book\", function()\r",
+							"{\r",
+							"\r",
+							"pm.response.to.have.status(200);\r",
+							"pm.expect(jsonData).have.property(\"msg\");\r",
+							"pm.expect(jsonData.msg).is.eqls(\"book is successfully deleted\");\r",
+							"\r",
+							"\r",
+							"\r",
+							"}\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							")"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\r\n    \"ID\":\"{{id}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://rahulshettyacademy.com/Library/DeleteBook.php",
+					"protocol": "https",
+					"host": [
+						"rahulshettyacademy",
+						"com"
+					],
+					"path": [
+						"Library",
+						"DeleteBook.php"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "id",
+			"value": ""
+		}
+	]
+}
